@@ -3,16 +3,22 @@ import * as http from 'http';
 import httpErrors from 'http-errors';
 import * as cors from 'cors';
 import * as morgan from 'morgan';
+import { connect_db } from './models';
 
 class App {
   private app: express.Application = express();
   public server: http.Server = http.createServer(this.app);
 
   public async init(): Promise<http.Server> {
+    this.connectDB();
     this.middlewares()
     this.routes()
     this.errorsHandler()
     return this.server;
+  }
+
+  private connectDB() : void {
+    connect_db()
   }
 
   private middlewares(): void {
