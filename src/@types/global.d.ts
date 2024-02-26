@@ -12,6 +12,13 @@ declare global {
     email: string;
     password: string;
   }
+
+  interface ILink {
+    id : string
+    long_form : string
+    short_form : string
+    visit_times : number
+  }
 }
 
 export {};
