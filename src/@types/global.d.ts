@@ -8,7 +8,7 @@ declare global {
 
   interface IUser {
     id: string;
-    name: string;
+    username: string;
     email: string;
     password: string;
   }
@@ -16,7 +16,7 @@ declare global {
   interface ILink {
     id : string
     long_form : string
-    short_form : string
+    maker : string
     visit_times : number
   }
 }

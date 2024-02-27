@@ -47,12 +47,27 @@ BEGIN
         CREATE TABLE links (
             id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
             long_form VARCHAR(255) NOT NULL UNIQUE,
-            short_form VARCHAR(255) NOT NULL UNIQUE,
+            maker VARCHAR(255) NOT NULL UNIQUE,
             visit_times INTEGER DEFAULT 0,
-            user_id UUID,
             created_at TIMESTAMP,
-            updated_at TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users(id)
+            updated_at TIMESTAMP
+        );
+    END IF;
+END
+$$;
+
+-- Create 'users_links' junction table if it doesn't exist
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT * FROM information_schema.tables 
+                   WHERE table_schema = 'public' 
+                   AND table_name = 'users_links') THEN
+        CREATE TABLE users_links (
+            user_id UUID NOT NULL,
+            link_id UUID NOT NULL,
+            PRIMARY KEY (user_id, link_id),
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (link_id) REFERENCES links(id)
         );
     END IF;
 END
@@ -65,8 +80,13 @@ VALUES ('Alice', 'alice@example.com', 'password123', NOW(), NOW()),
 ON CONFLICT (username) DO NOTHING;
 
 -- Insert dummy data into the 'links' table
--- Note: Replace 'user_id' with actual UUIDs from the inserted users
-INSERT INTO links (long_form, short_form, visit_times, user_id, created_at, updated_at) 
-VALUES ('http://example.com', 'exmpl', 10, (SELECT id FROM users WHERE username = 'Alice'), NOW(), NOW()),
-       ('http://example.org', 'exorg', 20, (SELECT id FROM users WHERE username = 'Bob'), NOW(), NOW())
+INSERT INTO links (long_form, short_form, visit_times, created_at, updated_at) 
+VALUES ('http://example.com', 'exmpl', 10, NOW(), NOW()),
+       ('http://example.org', 'exorg', 20, NOW(), NOW())
 ON CONFLICT (long_form) DO NOTHING;
+
+-- Insert relationships into 'users_links' table
+INSERT INTO users_links (user_id, link_id) 
+VALUES ((SELECT id FROM users WHERE username = 'Alice'), (SELECT id FROM links WHERE long_form = 'http://example.com')),
+       ((SELECT id FROM users WHERE username = 'Bob'), (SELECT id FROM links WHERE long_form = 'http://example.org'))
+ON CONFLICT DO NOTHING;

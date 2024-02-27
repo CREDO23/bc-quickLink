@@ -4,6 +4,7 @@ import httpErrors from 'http-errors';
 import * as cors from 'cors';
 import * as morgan from 'morgan';
 import { connect_db } from './models';
+import authRouter from './routes/auth';
 
 class App {
   private app: express.Application = express();
@@ -32,6 +33,7 @@ class App {
     this.app.get('/', (req: express.Request, res: express.Response) => {
       res.send('Server is running');
     });
+    this.app.use('/v1/auth', authRouter)
   }
 
   private errorsHandler(): void {

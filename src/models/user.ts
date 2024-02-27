@@ -5,8 +5,11 @@ import {
   Model,
   NonAttribute,
   DataTypes,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyCreateAssociationMixin
 } from 'sequelize';
 import {sequelize} from '.';
+import Link from './link';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<string>;
@@ -16,8 +19,9 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare created_at: CreationOptional<Date>;
   declare updated_at: CreationOptional<Date>;
 
-  //Loaded after association
-  links: NonAttribute<ILink>;
+  // Association mixins
+  declare createLink : BelongsToManyCreateAssociationMixin<Link>
+  declare addLink : BelongsToManyAddAssociationMixin<Link, Link['id']>
 }
 
 User.init(

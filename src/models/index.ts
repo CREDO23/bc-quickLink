@@ -14,7 +14,7 @@ import './associtions';
 export const connect_db = async (): Promise<void> => {
   await sequelize.authenticate();
 
-  await sequelize.sync({ alter: true });
+  await sequelize.sync({ force: true });
 
   console.log('db connection established');
 };
