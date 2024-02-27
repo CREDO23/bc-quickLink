@@ -6,7 +6,7 @@ import {
   NonAttribute,
   DataTypes,
 } from 'sequelize';
-import sequelize from '.';
+import {sequelize} from '.';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<string>;
@@ -45,8 +45,9 @@ User.init(
     updated_at: DataTypes.DATE,
   },
   {
-    sequelize,
+    sequelize : sequelize,
     modelName: 'users',
+    timestamps : false,
   },
 );
 

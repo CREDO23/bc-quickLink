@@ -6,9 +6,10 @@ import {
   ForeignKey,
   DataTypes,
   NonAttribute,
+  Sequelize,
 } from 'sequelize';
 import User from './user';
-import sequelize from '.';
+import {sequelize} from '.';
 
 class Link extends Model<InferAttributes<Link>, InferCreationAttributes<Link>> {
   declare id: CreationOptional<string>;
@@ -49,7 +50,7 @@ Link.init(
     created_at: DataTypes.DATE,
     updated_at: DataTypes.DATE,
   },
-  { sequelize, modelName: 'links' },
+  { sequelize : sequelize, modelName: 'links' , timestamps : false},
 );
 
 export default Link;
