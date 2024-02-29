@@ -19,6 +19,15 @@ declare global {
     maker : string
     visit_times : number
   }
+
+    // Add user to Req in express namespace
+    namespace Express {
+      interface Request {
+        auth: {
+          id : string
+        };
+      }
+    }
 }
 
 export {};

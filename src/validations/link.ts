@@ -3,7 +3,7 @@ import * as joi from 'joi';
 class LinkValidation {
   static create = joi
     .object({
-      value: joi
+      url: joi
         .string()
         .required()
         .regex(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)
@@ -12,7 +12,6 @@ class LinkValidation {
           'any.required': 'The url is required',
         }),
 
-        maker : joi.string().required()
     })
     .required()
     .messages({
