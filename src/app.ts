@@ -5,6 +5,8 @@ import * as cors from 'cors';
 import * as morgan from 'morgan';
 import { connect_db } from './models';
 import authRouter from './routes/auth';
+import { tokenGuard } from './middlewares/tokenGuard';
+import linkRouter from './routes/link';
 
 class App {
   private app: express.Application = express();
@@ -12,14 +14,14 @@ class App {
 
   public async init(): Promise<http.Server> {
     this.connectDB();
-    this.middlewares()
-    this.routes()
-    this.errorsHandler()
+    this.middlewares();
+    this.routes();
+    this.errorsHandler();
     return this.server;
   }
 
-  private connectDB() : void {
-    connect_db()
+  private connectDB(): void {
+    connect_db();
   }
 
   private middlewares(): void {
@@ -33,7 +35,8 @@ class App {
     this.app.get('/', (req: express.Request, res: express.Response) => {
       res.send('Server is running');
     });
-    this.app.use('/v1/auth', authRouter)
+    this.app.use('/v1/auth', authRouter);
+    this.app.use('/v1/link', tokenGuard, linkRouter);
   }
 
   private errorsHandler(): void {

@@ -14,7 +14,7 @@ class Link extends Model<InferAttributes<Link>, InferCreationAttributes<Link>> {
   declare id: CreationOptional<string>;
   declare long_form: string;
   declare maker: string;
-  declare visit_times: number;
+  declare visit_times: CreationOptional<number>;
   declare created_at: CreationOptional<string>;
   declare updated_at: CreationOptional<string>;
 
