@@ -8,7 +8,7 @@ import {
   NonAttribute,
 } from 'sequelize';
 import User from './user';
-import {sequelize} from '.';
+import { sequelize } from '.';
 
 class Link extends Model<InferAttributes<Link>, InferCreationAttributes<Link>> {
   declare id: CreationOptional<string>;
@@ -20,7 +20,7 @@ class Link extends Model<InferAttributes<Link>, InferCreationAttributes<Link>> {
 
   //Loaded after association
   declare user_id: ForeignKey<User['id']>;
-  declare user : NonAttribute<User>;
+  declare user: NonAttribute<User>;
 }
 
 Link.init(
@@ -49,7 +49,13 @@ Link.init(
     created_at: DataTypes.DATE,
     updated_at: DataTypes.DATE,
   },
-  { sequelize : sequelize, modelName: 'links' , timestamps : false},
+  {
+    sequelize: sequelize,
+    modelName: 'links',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+  },
 );
 
 export default Link;

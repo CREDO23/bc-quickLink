@@ -2,17 +2,21 @@ import { hashPassword } from '../helpers/bcrypt';
 import { signAccessToken } from '../helpers/jwt';
 import User from '../models/user';
 import UserValidation from '../validations/user';
-import httpError from 'http-errors';
-
+import * as httpError from 'http-errors';
 
 class AuthService {
-  static signup = (user: IUser) =>
-    new Promise<{
-        user : User
-        accessToken : string
-    } | Error>(async (resolve, reject) => {
+  static create = (
+    user: IUser,
+  ): Promise<Error | { user: IUser; accessToken: string }> => {
+    return new Promise<
+      | {
+          user: User;
+          accessToken: string;
+        }
+      | Error
+    >(async (resolve, reject) => {
       try {
-        const validatedUser = await UserValidation.create.validateAsync(user);
+        const validUser = await UserValidation.create.validateAsync(user);
 
         // check if user already exists
 
@@ -21,23 +25,25 @@ class AuthService {
         });
 
         if (exists) {
-          throw httpError.Conflict('User with the same name already exists');
+          throw httpError.Conflict('A user with the same name already exists');
         }
 
-        
         const newUser = await User.create({
-            ...validatedUser,
-            password: await hashPassword(user.password),
+          ...validUser,
+          password: await hashPassword(user.password),
         });
-        
-        const accessToken = await signAccessToken({id : newUser.id }, process.env.ACCESS_TOKEN_SECRET)
 
-        resolve({user :newUser, accessToken :accessToken});
+        const accessToken = await signAccessToken(
+          { id: newUser.id },
+          process.env.ACCESS_TOKEN_SECRET,
+        );
+
+        resolve({ user: newUser, accessToken: accessToken });
       } catch (error) {
         reject(error);
       }
     });
+  };
 }
 
-
-export default AuthService
+export default AuthService;

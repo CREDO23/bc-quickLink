@@ -72,21 +72,3 @@ BEGIN
     END IF;
 END
 $$;
-
--- Insert dummy data into the 'users' table
-INSERT INTO users (username, email, password, created_at, updated_at) 
-VALUES ('Alice', 'alice@example.com', 'password123', NOW(), NOW()),
-       ('Bob', 'bob@example.com', 'password456', NOW(), NOW())
-ON CONFLICT (username) DO NOTHING;
-
--- Insert dummy data into the 'links' table
-INSERT INTO links (long_form, short_form, visit_times, created_at, updated_at) 
-VALUES ('http://example.com', 'exmpl', 10, NOW(), NOW()),
-       ('http://example.org', 'exorg', 20, NOW(), NOW())
-ON CONFLICT (long_form) DO NOTHING;
-
--- Insert relationships into 'users_links' table
-INSERT INTO users_links (user_id, link_id) 
-VALUES ((SELECT id FROM users WHERE username = 'Alice'), (SELECT id FROM links WHERE long_form = 'http://example.com')),
-       ((SELECT id FROM users WHERE username = 'Bob'), (SELECT id FROM links WHERE long_form = 'http://example.org'))
-ON CONFLICT DO NOTHING;
