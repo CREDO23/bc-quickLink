@@ -10,7 +10,7 @@ class LinkControllers {
     try {
       const { id } = req.auth;
 
-      const newLink = (await LinkService.shorten(
+      const newLink = (await LinkService.create(
         req.body,
         id,
       )) as unknown as ILink;
@@ -24,6 +24,28 @@ class LinkControllers {
           link: newLink,
           shortUrl,
         },
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  static delete = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { id: userId } = req.auth
+      const { id: linkId } = req.params;
+
+      const result = await LinkService.delete(linkId, userId);
+
+      res.json(<IClientResponse>{
+        message: 'Link deleted successfully',
+        data: result,
+        error: null,
+        success: true,
       });
     } catch (error) {
       next(error);

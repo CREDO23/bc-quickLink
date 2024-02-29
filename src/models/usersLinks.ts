@@ -15,9 +15,6 @@ class UserLinks extends Model<
   InferAttributes<UserLinks>,
   InferCreationAttributes<UserLinks>
 > {
-  declare created_at: CreationOptional<Date>;
-  declare updated_at: CreationOptional<Date>;
-
   //Loaded after association
   declare user_id: ForeignKey<User['id']>;
   declare link_id: ForeignKey<User['id']>;
@@ -27,10 +24,7 @@ class UserLinks extends Model<
 }
 
 UserLinks.init(
-  {
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE,
-  },
+  {},
   {
     sequelize: sequelize,
     modelName: 'users_links',
