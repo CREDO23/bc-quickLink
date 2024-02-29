@@ -45,13 +45,15 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    created_at: DataTypes.DATE,
+    created_at:  DataTypes.DATE,
     updated_at: DataTypes.DATE,
   },
   {
     sequelize : sequelize,
     modelName: 'users',
-    timestamps : false,
+    timestamps : true,
+    createdAt : 'created_at',
+    updatedAt : 'updated_at'
   },
 );
 

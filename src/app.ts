@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as http from 'http';
-import httpErrors from 'http-errors';
+import * as httpErrors from 'http-errors';
 import * as cors from 'cors';
 import * as morgan from 'morgan';
 import { connect_db } from './models';

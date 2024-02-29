@@ -6,7 +6,8 @@
   "scripts": {
     "start:dev" : "ts-node-dev --respawn --transpile-only src/index.ts",
     "lint-fix" :"eslint src/**/*.js",
-    "build" : "pnpm install && tsc"
+    "build" : "pnpm install && tsc",
+    "init-db" : "./init-db.sh"
   },
   "repository": {
     "type": "git",
