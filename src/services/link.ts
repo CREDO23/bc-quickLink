@@ -6,7 +6,7 @@ import LinkValidation from '../validations/link';
 import UserLinks from '../models/usersLinks';
 
 class LinkService {
-  static shorten = (
+  static create = (
     data: { url: string },
     userId: string,
   ): Promise<Error | ILink> => {
@@ -26,18 +26,8 @@ class LinkService {
 
         if (url) {
           user.addLink(url);
-          resolve(url)
+          resolve(url);
         } else {
-          // const userLinks = await UserLinks.findAll({
-          //   include: {
-          //     model: Link,
-          //     attributes: ['long_form'],
-          //   },
-          //   where: { user_id: userId },
-          // });
-
-          // console.log(userLinks)
-
           const makers = (await Link.findAll({ attributes: ['maker'] })).map(
             (el) => el.maker,
           );
@@ -54,6 +44,33 @@ class LinkService {
           });
 
           resolve(newLink);
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  static delete = (linkId: string, userId: string): Promise<Error | number> => {
+    return new Promise<Error | number>(async (resolve, reject) => {
+      try {
+        const user = await User.findByPk(userId);
+        const link = await Link.findByPk(linkId);
+
+        if (user && link) {
+          const deleted = await UserLinks.destroy({
+            where: { user_id: userId, link_id: linkId },
+          });
+
+          resolve(deleted);
+        } else {
+          if (!user) {
+            throw httpError.NotFound('The user does not exist');
+          }
+
+          if (!link) {
+            throw httpError.NotFound('The link does not exist');
+          }
         }
       } catch (error) {
         reject(error);

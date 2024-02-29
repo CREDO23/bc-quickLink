@@ -1,10 +1,9 @@
-import {Router} from 'express'
-import LinkControllers from '../controllers/link'
+import { Router } from 'express';
+import LinkControllers from '../controllers/link';
 
+const linkRouter = Router();
 
-const linkRouter = Router()
+linkRouter.post('/shorten', LinkControllers.create);
+linkRouter.delete('/delete/:id', LinkControllers.delete);
 
-linkRouter.post('/shorten', LinkControllers.create)
-
-
-export default linkRouter
+export default linkRouter;

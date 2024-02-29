@@ -36,7 +36,7 @@ class App {
       res.send('Server is running');
     });
     this.app.use('/v1/auth', authRouter);
-    this.app.use('/v1/link', tokenGuard, linkRouter);
+    this.app.use('/v1/links', tokenGuard, linkRouter);
   }
 
   private errorsHandler(): void {
