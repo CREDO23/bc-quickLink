@@ -59,7 +59,7 @@ class AuthService {
           const user = (await User.findOne({ where: { username} }));
 
           if (!user) {
-            throw httpError.NotFound('Invalid username or passwordddd');
+            throw httpError.NotFound('Invalid username or password');
           }
 
           const isPasswordMatch = await comparePassword(password, user.password);
