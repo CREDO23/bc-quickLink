@@ -7,6 +7,7 @@ import { connect_db } from './models';
 import authRouter from './routes/auth';
 import { tokenGuard } from './middlewares/tokenGuard';
 import linkRouter from './routes/link';
+import router from './routes';
 
 class App {
   private app: express.Application = express();
@@ -35,6 +36,7 @@ class App {
     this.app.get('/', (req: express.Request, res: express.Response) => {
       res.send('Server is running');
     });
+    this.app.use('',router)
     this.app.use('/v1/auth', authRouter);
     this.app.use('/v1/links', tokenGuard, linkRouter);
   }

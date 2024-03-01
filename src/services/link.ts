@@ -61,7 +61,7 @@ class LinkService {
             include: {
               model: Link,
               as : 'link',
-              attributes: ['long_form', 'maker', 'visit_times'],
+              attributes: ['long_form', 'maker', 'visit_times','id'],
             },
             where: { user_id: userId },
             attributes : []
@@ -77,8 +77,8 @@ class LinkService {
     });
   };
 
-  static delete = (linkId: string, userId: string): Promise<Error | number> => {
-    return new Promise<Error | number>(async (resolve, reject) => {
+  static delete = (linkId: string, userId: string): Promise<Error | string> => {
+    return new Promise<Error | string>(async (resolve, reject) => {
       try {
         const user = await User.findByPk(userId);
         const link = await Link.findByPk(linkId);
@@ -88,7 +88,10 @@ class LinkService {
             where: { user_id: userId, link_id: linkId },
           });
 
-          resolve(deleted);
+          if(deleted){
+            resolve(linkId);
+          }
+
         } else {
           if (!user) {
             throw httpError.NotFound('The user does not exist');
