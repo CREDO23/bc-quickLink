@@ -88,6 +88,8 @@ class LinkService {
             where: { user_id: userId, link_id: linkId },
           });
 
+          await link.destroy()
+
           if(deleted){
             resolve(linkId);
           }
