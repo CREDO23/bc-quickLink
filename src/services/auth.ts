@@ -5,7 +5,7 @@ import UserValidation from '../validations/user';
 import * as httpError from 'http-errors';
 
 class AuthService {
-  static create = (
+  static signup = (
     user: IUser,
   ): Promise<Error | { user: IUser; accessToken: string }> => {
     return new Promise<
@@ -16,7 +16,7 @@ class AuthService {
       | Error
     >(async (resolve, reject) => {
       try {
-        const validUser = await UserValidation.create.validateAsync(user);
+        const validUser = await UserValidation.signup.validateAsync(user);
 
         // check if user already exists
 
