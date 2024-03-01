@@ -1,7 +1,7 @@
 import * as joi from 'joi';
 
 class UserValidation {
-  static create = joi
+  static signup = joi
     .object({
       username: joi.string().required().min(5).max(15).messages({
         'any.required': 'The username is required',

@@ -30,13 +30,44 @@ class LinkControllers {
     }
   };
 
+  static getByUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const { id } = req.auth;
+
+      const links = (await LinkService.getByUser(id)) as unknown as {link : ILink}[];
+
+      const formated = links.map((el) => {
+        const shortUrl =
+          req.protocol + '://' + req.get('host') + '/' + el.link.maker;
+
+        return {
+          link : el.link,
+          shortUrl,
+        };
+      });
+
+      res.json(<IClientResponse>{
+        message: 'Links',
+        data: formated,
+        error: null,
+        success: true,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   static delete = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { id: userId } = req.auth
+      const { id: userId } = req.auth;
       const { id: linkId } = req.params;
 
       const result = await LinkService.delete(linkId, userId);

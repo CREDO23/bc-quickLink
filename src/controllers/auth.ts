@@ -8,7 +8,7 @@ class AuthControllers {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const newUser = await AuthService.create(req.body);
+      const newUser = await AuthService.signin(req.body);
 
       res.json(<IClientResponse>{
         message: 'User created successfully',

@@ -51,6 +51,32 @@ class LinkService {
     });
   };
 
+  static getByUser = (userId: string): Promise<Error | {link : ILink}[]> => {
+    return new Promise<Error | {link : ILink}[]>(async (resolve, reject) => {
+      try {
+        const user = await User.findByPk(userId);
+
+        if (user) {
+          const links = await UserLinks.findAll({
+            include: {
+              model: Link,
+              as : 'link',
+              attributes: ['long_form', 'maker', 'visit_times'],
+            },
+            where: { user_id: userId },
+            attributes : []
+          });
+
+          resolve(links as unknown as {link : ILink}[]);
+        } else {
+          throw httpError.NotFound('The user does not exist');
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
   static delete = (linkId: string, userId: string): Promise<Error | number> => {
     return new Promise<Error | number>(async (resolve, reject) => {
       try {

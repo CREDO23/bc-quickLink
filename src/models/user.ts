@@ -3,7 +3,7 @@ import {
   InferAttributes,
   InferCreationAttributes,
   Model,
-  NonAttribute,
+  BelongsToManyGetAssociationsMixin,
   DataTypes,
   BelongsToManyAddAssociationMixin,
   BelongsToManyCreateAssociationMixin
@@ -22,6 +22,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   // Association mixins
   declare createLink : BelongsToManyCreateAssociationMixin<Link>
   declare addLink : BelongsToManyAddAssociationMixin<Link, Link['id']>
+  declare getLinks : BelongsToManyGetAssociationsMixin<Link>
 }
 
 User.init(
