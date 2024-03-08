@@ -8,7 +8,7 @@ declare global {
 
   interface IUser {
     id: string;
-    name: string;
+    username: string;
     email: string;
     password: string;
   }
@@ -16,9 +16,18 @@ declare global {
   interface ILink {
     id : string
     long_form : string
-    short_form : string
+    maker : string
     visit_times : number
   }
+
+    // Add user to Req in express namespace
+    namespace Express {
+      interface Request {
+        auth: {
+          id : string
+        };
+      }
+    }
 }
 
 export {};

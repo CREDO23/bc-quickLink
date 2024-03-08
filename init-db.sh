@@ -8,4 +8,4 @@ if [ "$(whoami)" != "postgres" ]; then
 fi
 
 # Run the SQL script with psql command
-psql -f initdb.sql
+psql -f init-db.sql

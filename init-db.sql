@@ -30,7 +30,7 @@ BEGIN
             id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
             username VARCHAR(50) UNIQUE NOT NULL,
             email VARCHAR(50),
-            password VARCHAR(50) NOT NULL,
+            password VARCHAR(255) NOT NULL,
             created_at TIMESTAMP,
             updated_at TIMESTAMP
         );
@@ -47,26 +47,28 @@ BEGIN
         CREATE TABLE links (
             id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
             long_form VARCHAR(255) NOT NULL UNIQUE,
-            short_form VARCHAR(255) NOT NULL UNIQUE,
+            maker VARCHAR(255) NOT NULL UNIQUE,
             visit_times INTEGER DEFAULT 0,
-            user_id UUID,
             created_at TIMESTAMP,
-            updated_at TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users(id)
+            updated_at TIMESTAMP
         );
     END IF;
 END
 $$;
 
--- Insert dummy data into the 'users' table
-INSERT INTO users (username, email, password, created_at, updated_at) 
-VALUES ('Alice', 'alice@example.com', 'password123', NOW(), NOW()),
-       ('Bob', 'bob@example.com', 'password456', NOW(), NOW())
-ON CONFLICT (username) DO NOTHING;
-
--- Insert dummy data into the 'links' table
--- Note: Replace 'user_id' with actual UUIDs from the inserted users
-INSERT INTO links (long_form, short_form, visit_times, user_id, created_at, updated_at) 
-VALUES ('http://example.com', 'exmpl', 10, (SELECT id FROM users WHERE username = 'Alice'), NOW(), NOW()),
-       ('http://example.org', 'exorg', 20, (SELECT id FROM users WHERE username = 'Bob'), NOW(), NOW())
-ON CONFLICT (long_form) DO NOTHING;
+-- Create 'users_links' junction table if it doesn't exist
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT * FROM information_schema.tables 
+                   WHERE table_schema = 'public' 
+                   AND table_name = 'users_links') THEN
+        CREATE TABLE users_links (
+            user_id UUID NOT NULL,
+            link_id UUID NOT NULL,
+            PRIMARY KEY (user_id, link_id),
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (link_id) REFERENCES links(id)
+        );
+    END IF;
+END
+$$;

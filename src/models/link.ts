@@ -6,22 +6,21 @@ import {
   ForeignKey,
   DataTypes,
   NonAttribute,
-  Sequelize,
 } from 'sequelize';
 import User from './user';
-import {sequelize} from '.';
+import { sequelize } from '.';
 
 class Link extends Model<InferAttributes<Link>, InferCreationAttributes<Link>> {
   declare id: CreationOptional<string>;
   declare long_form: string;
-  declare short_form: string;
-  declare visit_times: number;
+  declare maker: string;
+  declare visit_times: CreationOptional<number>;
   declare created_at: CreationOptional<string>;
   declare updated_at: CreationOptional<string>;
 
   //Loaded after association
   declare user_id: ForeignKey<User['id']>;
-  declare user : NonAttribute<User>;
+  declare user: NonAttribute<User>;
 }
 
 Link.init(
@@ -38,7 +37,7 @@ Link.init(
       allowNull: false,
       unique: true,
     },
-    short_form: {
+    maker: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
@@ -50,7 +49,13 @@ Link.init(
     created_at: DataTypes.DATE,
     updated_at: DataTypes.DATE,
   },
-  { sequelize : sequelize, modelName: 'links' , timestamps : false},
+  {
+    sequelize: sequelize,
+    modelName: 'links',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+  },
 );
 
 export default Link;
