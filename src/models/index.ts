@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize';
 import * as pg from 'pg';
-import { db_connection_string } from '../configs/database';
+import {  prod_db_connection_string} from '../configs/database';
 
-export const sequelize = new Sequelize(db_connection_string, {
+export const sequelize = new Sequelize(prod_db_connection_string, {
   dialectModule: pg,
   dialect: 'postgres',
   logging: false,
