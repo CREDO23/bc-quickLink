@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "An app that shortens long links",
   "main": "index.js",
+  "type" : "module",
   "scripts": {
     "start:dev" : "ts-node-dev --respawn --transpile-only src/index.ts",
     "lint-fix" :"eslint src/**/*.js",
